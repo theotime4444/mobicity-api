@@ -1,0 +1,24 @@
+{
+  "name": "mobicity-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theotime4444/mobicity-api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/theotime4444/mobicity-api/issues"
+  },
+  "homepage": "https://github.com/theotime4444/mobicity-api#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
