@@ -1,12 +1,8 @@
 # Variables d'environnement
 .env
 
-
 # Prisma
-/generated/prisma
+/src/generated/prisma
 
 # Fichier de dépendances node 
-node_modules/
-/src/generated/prisma
-
-/src/generated/prisma
+/node_modules/
