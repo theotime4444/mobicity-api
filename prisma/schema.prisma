@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model category {
+  id                 Int                  @id @default(autoincrement())
+  category_name      String               @unique @db.VarChar(150)
+  transport_location transport_location[]
+}
+
+model favorite {
+  user_account_id       Int
+  transport_location_id Int
+  transport_location    transport_location @relation(fields: [transport_location_id], references: [id], onDelete: Cascade)
+  user_account          user_account       @relation(fields: [user_account_id], references: [id], onDelete: Cascade)
+
+  @@id([user_account_id, transport_location_id])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model spatial_ref_sys {
+  srid      Int     @id
+  auth_name String? @db.VarChar(256)
+  auth_srid Int?
+  srtext    String? @db.VarChar(2048)
+  proj4text String? @db.VarChar(2048)
+}
+
+model transport_location {
+  id          Int                      @id @default(autoincrement())
+  name        String                   @db.VarChar(100)
+  category_id Int
+  vehicle_id  Int?
+  address     String?                  @db.VarChar(255)
+  coord       Unsupported("geometry")?
+  favorite    favorite[]
+  category    category                 @relation(fields: [category_id], references: [id])
+  vehicle     vehicle?                 @relation(fields: [vehicle_id], references: [id])
+}
+
+model user_account {
+  id           Int        @id @default(autoincrement())
+  first_name   String     @db.VarChar(100)
+  last_name    String     @db.VarChar(100)
+  mail_address String     @unique @db.VarChar(255)
+  password     String     @db.VarChar(50)
+  is_admin     Boolean    @default(false)
+  favorite     favorite[]
+}
+
+model vehicle {
+  id                 Int                  @id @default(autoincrement())
+  brand              String               @db.VarChar(100)
+  model              String               @db.VarChar(100)
+  transport_location transport_location[]
+}
