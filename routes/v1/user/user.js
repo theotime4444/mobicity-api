@@ -1,12 +1,8 @@
 import {Router} from 'express';
 import {getCurrentUser, updateCurrentUser} from "../../../controler/user.js";
-import {checkJWT} from "../../../middleware/identification/jwt.js";
 import {userValidatorMiddleware} from "../../../middleware/validation.js";
 
 const router = Router();
-
-// Toutes les routes nécessitent checkJWT
-router.use(checkJWT);
 
 /**
  * @swagger

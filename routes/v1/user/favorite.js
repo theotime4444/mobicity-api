@@ -4,13 +4,9 @@ import {
     addMyFavorite,
     deleteMyFavorite
 } from "../../../controler/favorite.js";
-import {checkJWT} from "../../../middleware/identification/jwt.js";
 import {favoriteValidatorMiddleware} from "../../../middleware/validation.js";
 
 const router = Router();
-
-// Toutes les routes nécessitent checkJWT
-router.use(checkJWT);
 
 /**
  * @swagger
