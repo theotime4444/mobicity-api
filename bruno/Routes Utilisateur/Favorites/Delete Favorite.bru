@@ -1,0 +1,28 @@
+meta {
+  name: Delete Favorite
+  type: http
+  seq: 3
+}
+
+delete {
+  url: http://localhost:3001/v1/favorites/me/1
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{token}}
+}
+
+vars:pre-request {
+  token: 
+}
+
+docs {
+  # Delete Favorite
+  
+  Supprime un favori de l'utilisateur connecté.
+  
+  Remplacez le dernier `/1` par l'ID du point de transport à supprimer.
+}
+

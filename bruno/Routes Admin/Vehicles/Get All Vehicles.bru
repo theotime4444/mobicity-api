@@ -1,0 +1,26 @@
+meta {
+  name: Get All Vehicles
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:3001/v1/admin/vehicles
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{adminToken}}
+}
+
+vars:pre-request {
+  adminToken: 
+}
+
+docs {
+  # Get All Vehicles (Admin)
+  
+  Récupère tous les véhicules (admin uniquement).
+}
+

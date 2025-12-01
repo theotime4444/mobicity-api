@@ -1,0 +1,25 @@
+meta {
+  name: Get My Favorites
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:3001/v1/favorites/me
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{token}}
+}
+
+vars:pre-request {
+  token: 
+}
+
+docs {
+  # Get My Favorites
+  
+  Récupère tous les favoris de l'utilisateur connecté.
+}

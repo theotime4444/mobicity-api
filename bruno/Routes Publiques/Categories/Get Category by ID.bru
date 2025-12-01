@@ -1,0 +1,18 @@
+meta {
+  name: Get Category by ID
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:3001/v1/categories/1
+  body: none
+  auth: none
+}
+
+docs {
+  # Get Category by ID
+  
+  Récupère une catégorie par son ID (route publique).
+}
+

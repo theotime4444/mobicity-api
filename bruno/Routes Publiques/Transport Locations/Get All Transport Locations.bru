@@ -1,0 +1,24 @@
+meta {
+  name: Get All Transport Locations
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:3001/v1/transport-locations?limit=10&offset=0
+  body: none
+  auth: none
+}
+
+docs {
+  # Get All Transport Locations
+  
+  Récupère tous les points de transport avec pagination (route publique).
+  
+  **Paramètres de requête:**
+  - limit: nombre de résultats (défaut: 10)
+  - offset: nombre de résultats à ignorer (défaut: 0)
+  - categoryId: filtre par catégorie (optionnel)
+  - search: recherche par adresse ou nom (optionnel)
+}
+

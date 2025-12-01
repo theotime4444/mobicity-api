@@ -1,0 +1,33 @@
+meta {
+  name: Login
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:3001/v1/auth/login
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "email": "marie.martin@mail.com",
+    "password": "password456"
+  }
+}
+
+docs {
+  # Login
+  
+  Connexion pour obtenir un token JWT.
+  
+  **Comptes de test:**
+  - Admin: marie.martin@mail.com / password456
+  - User: jean.dupont@mail.com / password123
+}
+

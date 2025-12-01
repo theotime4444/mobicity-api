@@ -1,0 +1,26 @@
+meta {
+  name: Get Favorites by User
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:3001/v1/admin/favorites/users/1
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{adminToken}}
+}
+
+vars:pre-request {
+  adminToken: 
+}
+
+docs {
+  # Get Favorites by User (Admin)
+  
+  Récupère tous les favoris d'un utilisateur spécifique (admin uniquement).
+}
+

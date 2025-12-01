@@ -1,0 +1,34 @@
+meta {
+  name: Update Category
+  type: http
+  seq: 4
+}
+
+patch {
+  url: http://localhost:3001/v1/admin/categories
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{adminToken}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "id": 1,
+    "name": "Catégorie Modifiée"
+  }
+}
+
+vars:pre-request {
+  adminToken: 
+}
+
+docs {
+  # Update Category (Admin)
+  
+  Met à jour une catégorie (admin uniquement).
+}
+

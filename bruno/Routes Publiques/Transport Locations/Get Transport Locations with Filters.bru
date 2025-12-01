@@ -1,0 +1,18 @@
+meta {
+  name: Get Transport Locations with Filters
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:3001/v1/transport-locations?limit=10&offset=0&categoryId=1&search=bus
+  body: none
+  auth: none
+}
+
+docs {
+  # Get Transport Locations with Filters
+  
+  Récupère les points de transport avec filtres (route publique).
+}
+

@@ -1,0 +1,28 @@
+meta {
+  name: Get All Users
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:3001/v1/admin/users?limit=50&offset=0
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{adminToken}}
+}
+
+vars:pre-request {
+  adminToken: 
+}
+
+docs {
+  # Get All Users (Admin)
+  
+  Récupère tous les utilisateurs avec pagination (admin uniquement).
+  
+  **Note:** Utilisez le token d'un compte admin (marie.martin@mail.com).
+}
+

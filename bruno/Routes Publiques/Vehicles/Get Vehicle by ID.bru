@@ -1,0 +1,18 @@
+meta {
+  name: Get Vehicle by ID
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:3001/v1/vehicles/1
+  body: none
+  auth: none
+}
+
+docs {
+  # Get Vehicle by ID
+  
+  Récupère un véhicule par son ID (route publique).
+}
+

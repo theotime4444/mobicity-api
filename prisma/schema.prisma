@@ -1,0 +1,75 @@
+// Prisma Schema for Mobicity API
+// This file defines the database structure using Prisma-first approach
+
+generator client {
+  provider = "prisma-client-js"
+  // binaryTargets specifies the operating systems for which Prisma should generate query engine binaries
+  // - "native": for local development on Windows/Mac/Linux
+  // - "linux-musl-openssl-3.0.x": for Docker Alpine Linux (required because Alpine uses musl libc instead of glibc)
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model - Represents application users
+model User {
+  id        Int        @id @default(autoincrement())
+  firstName String?    @map("first_name")
+  lastName  String?    @map("last_name")
+  email     String     @unique
+  password  String
+  isAdmin   Boolean    @default(false) @map("is_admin")
+  favorites Favorite[]
+
+  @@map("users")
+}
+
+// Category model - Transport location categories (Bus stop, Train station, etc.)
+model Category {
+  id             Int              @id @default(autoincrement())
+  name           String?
+  transportLocations TransportLocation[]
+
+  @@map("categories")
+}
+
+// Vehicle model - Vehicle types (Bus, Train, Car, etc.)
+model Vehicle {
+  id             Int              @id @default(autoincrement())
+  brand          String?
+  model          String?
+  transportLocations TransportLocation[]
+
+  @@map("vehicles")
+}
+
+// TransportLocation model - Physical transport locations
+model TransportLocation {
+  id          Int       @id @default(autoincrement())
+  categoryId  Int?      @map("category_id")
+  vehicleId   Int?      @map("vehicle_id")
+  address     String?
+  latitude    Decimal?  @db.Decimal(10, 8)
+  longitude   Decimal?  @db.Decimal(11, 8)
+  
+  category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  vehicle     Vehicle?  @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+  favorites   Favorite[]
+
+  @@map("transport_locations")
+}
+
+// Favorite model - User's favorite transport locations (many-to-many relationship)
+model Favorite {
+  userId           Int            @map("user_id")
+  transportLocationId Int            @map("transport_location_id")
+  
+  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transportLocation   TransportLocation @relation(fields: [transportLocationId], references: [id], onDelete: Cascade)
+
+  @@id([userId, transportLocationId])
+  @@map("favorites")
+}

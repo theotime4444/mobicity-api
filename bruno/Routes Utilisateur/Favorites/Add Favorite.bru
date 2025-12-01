@@ -1,0 +1,33 @@
+meta {
+  name: Add Favorite
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3001/v1/favorites/me
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{token}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "transportLocationId": 1
+  }
+}
+
+vars:pre-request {
+  token: 
+}
+
+docs {
+  # Add Favorite
+  
+  Ajoute un point de transport aux favoris de l'utilisateur connecté.
+}
+

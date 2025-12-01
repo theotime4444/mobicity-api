@@ -1,0 +1,35 @@
+meta {
+  name: Update Vehicle
+  type: http
+  seq: 4
+}
+
+patch {
+  url: http://localhost:3001/v1/admin/vehicles
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{adminToken}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "id": 1,
+    "brand": "Updated Brand",
+    "model": "Updated Model"
+  }
+}
+
+vars:pre-request {
+  adminToken: 
+}
+
+docs {
+  # Update Vehicle (Admin)
+  
+  Met à jour un véhicule (admin uniquement).
+}
+

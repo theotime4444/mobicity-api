@@ -1,0 +1,26 @@
+meta {
+  name: Delete Category
+  type: http
+  seq: 5
+}
+
+delete {
+  url: http://localhost:3001/v1/admin/categories/1
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{adminToken}}
+}
+
+vars:pre-request {
+  adminToken: 
+}
+
+docs {
+  # Delete Category (Admin)
+  
+  Supprime une catégorie (admin uniquement).
+}
+

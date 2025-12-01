@@ -1,0 +1,51 @@
+services:
+  # Service pour l'API Node.js
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mobicity-api
+    ports:
+      - "3001:3001"
+    volumes:
+      # Monter le code source pour le développement (hot-reload)
+      - .:/app
+      # Ne pas monter node_modules pour utiliser ceux du conteneur
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - HOSTDB=db
+      - USERDB=mobicity
+      - PASSWORDDB=mobicity_password
+      - DBNAME=mobicity_db
+      - DATABASE_URL=postgresql://mobicity:mobicity_password@db:5432/mobicity_db?schema=public
+      - JWT_SECRET=votre_secret_jwt_tres_securise_changez_en_production
+      - PASSWORD_PEPPER=cecinestpasunpepper
+    restart: unless-stopped
+    command: npm run dev
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # Base de données PostgreSQL
+  db:
+    image: postgres:16-alpine
+    container_name: mobicity-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=mobicity
+      - POSTGRES_PASSWORD=mobicity_password
+      - POSTGRES_DB=mobicity_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mobicity"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+

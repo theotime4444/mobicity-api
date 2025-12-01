@@ -1,0 +1,26 @@
+meta {
+  name: Delete Vehicle
+  type: http
+  seq: 5
+}
+
+delete {
+  url: http://localhost:3001/v1/admin/vehicles/1
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{adminToken}}
+}
+
+vars:pre-request {
+  adminToken: 
+}
+
+docs {
+  # Delete Vehicle (Admin)
+  
+  Supprime un véhicule (admin uniquement).
+}
+

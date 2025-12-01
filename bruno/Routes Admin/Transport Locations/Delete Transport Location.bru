@@ -1,0 +1,26 @@
+meta {
+  name: Delete Transport Location
+  type: http
+  seq: 5
+}
+
+delete {
+  url: http://localhost:3001/v1/admin/transport-locations/1
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{adminToken}}
+}
+
+vars:pre-request {
+  adminToken: 
+}
+
+docs {
+  # Delete Transport Location (Admin)
+  
+  Supprime un point de transport (admin uniquement).
+}
+

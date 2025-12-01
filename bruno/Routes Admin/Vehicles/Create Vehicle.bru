@@ -1,0 +1,34 @@
+meta {
+  name: Create Vehicle
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3001/v1/admin/vehicles
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{adminToken}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "brand": "Tesla",
+    "model": "Model 3"
+  }
+}
+
+vars:pre-request {
+  adminToken: 
+}
+
+docs {
+  # Create Vehicle (Admin)
+  
+  Crée un nouveau véhicule (admin uniquement).
+}
+

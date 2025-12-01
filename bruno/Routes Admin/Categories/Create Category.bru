@@ -1,0 +1,33 @@
+meta {
+  name: Create Category
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3001/v1/admin/categories
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{adminToken}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "Nouvelle Catégorie"
+  }
+}
+
+vars:pre-request {
+  adminToken: 
+}
+
+docs {
+  # Create Category (Admin)
+  
+  Crée une nouvelle catégorie (admin uniquement).
+}
+

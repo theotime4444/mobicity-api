@@ -1,0 +1,34 @@
+meta {
+  name: Update Transport Location
+  type: http
+  seq: 4
+}
+
+patch {
+  url: http://localhost:3001/v1/admin/transport-locations
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{adminToken}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "id": 1,
+    "address": "Adresse Modifiée, 5000 Namur"
+  }
+}
+
+vars:pre-request {
+  adminToken: 
+}
+
+docs {
+  # Update Transport Location (Admin)
+  
+  Met à jour un point de transport (admin uniquement).
+}
+

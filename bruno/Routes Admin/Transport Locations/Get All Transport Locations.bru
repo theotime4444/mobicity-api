@@ -1,0 +1,26 @@
+meta {
+  name: Get All Transport Locations
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:3001/v1/admin/transport-locations?limit=10&offset=0
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{adminToken}}
+}
+
+vars:pre-request {
+  adminToken: 
+}
+
+docs {
+  # Get All Transport Locations (Admin)
+  
+  Récupère tous les points de transport (admin uniquement).
+}
+

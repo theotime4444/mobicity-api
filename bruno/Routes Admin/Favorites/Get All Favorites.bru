@@ -1,0 +1,26 @@
+meta {
+  name: Get All Favorites
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://localhost:3001/v1/admin/favorites?limit=50&offset=0
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{adminToken}}
+}
+
+vars:pre-request {
+  adminToken: 
+}
+
+docs {
+  # Get All Favorites (Admin)
+  
+  Récupère tous les favoris (admin uniquement).
+}
+
