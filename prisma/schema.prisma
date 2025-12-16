@@ -55,8 +55,8 @@ model TransportLocation {
   latitude    Decimal?  @db.Decimal(10, 8)
   longitude   Decimal?  @db.Decimal(11, 8)
   
-  category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  vehicle     Vehicle?  @relation(fields: [vehicleId], references: [id], onDelete: SetNull)
+  category    Category? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  vehicle     Vehicle?  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
   favorites   Favorite[]
 
   @@map("transport_locations")

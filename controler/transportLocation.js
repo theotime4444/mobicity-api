@@ -87,3 +87,28 @@ export const deleteTransportLocation = async (req, res) => {
     }
 };
 
+export const getTransportLocationsNearby = async (req, res) => {
+    try {
+        const {latitude, longitude, radius, limit, categoryId, search} = req.val;
+        
+        // Validation supplémentaire : radius nécessite latitude/longitude
+        if (radius !== undefined && (latitude === undefined || longitude === undefined)) {
+            return res.status(400).json({error: "radius requires latitude and longitude"});
+        }
+        
+        const transportLocations = await transportLocationModel.readTransportLocationsNearby({
+            latitude,
+            longitude,
+            radius,
+            limit: limit || 50,
+            categoryId,
+            search
+        });
+        
+        res.json(transportLocations);
+    } catch (err) {
+        console.error(err);
+        res.sendStatus(500);
+    }
+};
+

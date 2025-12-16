@@ -44,8 +44,35 @@ export const updateCategory = async (id, {name}) => {
 };
 
 export const deleteCategory = async (id) => {
-    await prisma.category.delete({
-        where: { id }
+    // Transaction pour garantir l'atomicité de la suppression
+    return await prisma.$transaction(async (tx) => {
+        // Vérifier que la Category existe
+        const category = await tx.category.findUnique({
+            where: { id },
+            include: {
+                transportLocations: {
+                    select: { id: true }
+                }
+            }
+        });
+        
+        if (!category) {
+            throw new Error('Category not found');
+        }
+        
+        // Compter les TransportLocation associés avant suppression
+        const transportLocationCount = category.transportLocations.length;
+        
+        // Supprimer la Category (cascade automatique des TransportLocation via Prisma)
+        await tx.category.delete({
+            where: { id }
+        });
+        
+        // Retourner le nombre de TransportLocation supprimés
+        return {
+            deletedCategory: true,
+            deletedTransportLocations: transportLocationCount
+        };
     });
 };
 

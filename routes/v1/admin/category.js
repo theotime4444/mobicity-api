@@ -134,7 +134,7 @@ router.patch('/', categoryValidatorMiddleware.update, updateCategory);
  *      tags:
  *          - Admin
  *      summary: Delete a category (Admin only)
- *      description: Deletes a category by its ID
+ *      description: Deletes a category by its ID. All associated transport locations are also deleted (cascade delete). The operation is atomic (transaction).
  *      parameters:
  *         - in: path
  *           name: id
@@ -143,10 +143,24 @@ router.patch('/', categoryValidatorMiddleware.update, updateCategory);
  *           required: true
  *           description: Numeric ID of the category to delete
  *      responses:
- *          204:
- *              description: Category deleted successfully
+ *          200:
+ *              description: Category and associated transport locations deleted successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: object
+ *                          properties:
+ *                              deletedCategory:
+ *                                  type: boolean
+ *                                  example: true
+ *                              deletedTransportLocations:
+ *                                  type: integer
+ *                                  description: Number of transport locations that were deleted
+ *                                  example: 5
  *          400:
  *              description: Invalid ID
+ *          404:
+ *              description: Category not found
  *          401:
  *              $ref: '#/components/responses/UnauthorizedError'
  *          403:

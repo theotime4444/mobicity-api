@@ -61,10 +61,13 @@ export const deleteCategory = async (req, res) => {
             res.sendStatus(400);
             return;
         }
-        await categoryModel.deleteCategory(id);
-        res.sendStatus(204);
+        const result = await categoryModel.deleteCategory(id);
+        res.status(200).json(result);
     } catch (e) {
         console.error(e);
+        if(e.message === 'Category not found') {
+            return res.sendStatus(404);
+        }
         res.sendStatus(500);
     }
 };

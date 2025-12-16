@@ -79,6 +79,43 @@
  *              vehicle:
  *                  $ref: '#/components/schemas/Vehicle'
  *  
+ *      TransportLocationWithDistance:
+ *          type: object
+ *          properties:
+ *              id:
+ *                  type: integer
+ *                  example: 1
+ *              categoryId:
+ *                  type: integer
+ *                  nullable: true
+ *                  example: 1
+ *              vehicleId:
+ *                  type: integer
+ *                  nullable: true
+ *                  example: 1
+ *              address:
+ *                  type: string
+ *                  nullable: true
+ *                  example: Place de la Gare, 5000 Namur
+ *              latitude:
+ *                  type: string
+ *                  format: decimal
+ *                  nullable: true
+ *                  example: "50.4674"
+ *              longitude:
+ *                  type: string
+ *                  format: decimal
+ *                  nullable: true
+ *                  example: "4.8719"
+ *              distance:
+ *                  type: number
+ *                  description: Distance from the reference point in kilometers (calculated using Haversine formula)
+ *                  example: 0.5
+ *              category:
+ *                  $ref: '#/components/schemas/Category'
+ *              vehicle:
+ *                  $ref: '#/components/schemas/Vehicle'
+ *  
  *      Favorite:
  *          type: object
  *          properties:

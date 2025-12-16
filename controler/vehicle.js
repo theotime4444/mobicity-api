@@ -61,10 +61,13 @@ export const deleteVehicle = async (req, res) => {
             res.sendStatus(400);
             return;
         }
-        await vehicleModel.deleteVehicle(id);
-        res.sendStatus(204);
+        const result = await vehicleModel.deleteVehicle(id);
+        res.status(200).json(result);
     } catch (e) {
         console.error(e);
+        if(e.message === 'Vehicle not found') {
+            return res.sendStatus(404);
+        }
         res.sendStatus(500);
     }
 };

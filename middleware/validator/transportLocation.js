@@ -4,6 +4,35 @@ import vine from '@vinejs/vine';
  * @swagger
  * components:
  *  schemas:
+ *      TransportLocationWithDistance:
+ *          type: object
+ *          properties:
+ *              id:
+ *                  type: integer
+ *              categoryId:
+ *                  type: integer
+ *                  nullable: true
+ *              vehicleId:
+ *                  type: integer
+ *                  nullable: true
+ *              address:
+ *                  type: string
+ *                  nullable: true
+ *              latitude:
+ *                  type: string
+ *                  format: decimal
+ *                  nullable: true
+ *              longitude:
+ *                  type: string
+ *                  format: decimal
+ *                  nullable: true
+ *              distance:
+ *                  type: number
+ *                  description: Distance from the reference point in kilometers (calculated using Haversine formula)
+ *              category:
+ *                  $ref: '#/components/schemas/Category'
+ *              vehicle:
+ *                  $ref: '#/components/schemas/Vehicle'
  *      TransportLocationToAdd:
  *          type: object
  *          required:
@@ -66,7 +95,17 @@ const transportLocationToUpdateSchema = vine.object({
     longitude: vine.number().min(-180).max(180).optional()
 });
 
+const transportLocationNearbySchema = vine.object({
+    latitude: vine.number().min(-90).max(90),
+    longitude: vine.number().min(-180).max(180),
+    radius: vine.number().positive().optional(),
+    limit: vine.number().positive().optional(),
+    categoryId: vine.number().optional(),
+    search: vine.string().trim().optional()
+});
+
 export const
     transportLocationToAdd = vine.compile(transportLocationToAddSchema),
-    transportLocationToUpdate = vine.compile(transportLocationToUpdateSchema);
+    transportLocationToUpdate = vine.compile(transportLocationToUpdateSchema),
+    transportLocationNearby = vine.compile(transportLocationNearbySchema);
 

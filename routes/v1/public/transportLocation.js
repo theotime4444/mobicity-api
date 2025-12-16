@@ -1,5 +1,6 @@
 import {Router} from 'express';
-import {getTransportLocations, getTransportLocation} from "../../../controler/transportLocation.js";
+import {getTransportLocations, getTransportLocation, getTransportLocationsNearby} from "../../../controler/transportLocation.js";
+import {transportLocationValidatorMiddleware} from "../../../middleware/validation.js";
 
 const router = Router();
 
@@ -49,6 +50,69 @@ const router = Router();
  *              description: Error server
  */
 router.get('/', getTransportLocations);
+
+/**
+ * @swagger
+ * /v1/transport-locations/nearby:
+ *  get:
+ *      tags:
+ *          - TransportLocation
+ *      summary: Get transport locations nearby a point
+ *      description: Returns a list of transport locations sorted by distance from a given point using Haversine formula (public)
+ *      parameters:
+ *         - in: query
+ *           name: latitude
+ *           required: true
+ *           schema:
+ *             type: number
+ *           description: Latitude of the reference point (between -90 and 90)
+ *           example: 50.4674
+ *         - in: query
+ *           name: longitude
+ *           required: true
+ *           schema:
+ *             type: number
+ *           description: Longitude of the reference point (between -180 and 180)
+ *           example: 4.8719
+ *         - in: query
+ *           name: radius
+ *           schema:
+ *             type: number
+ *           description: Maximum radius in kilometers (optional, no limit if not provided)
+ *           example: 5
+ *         - in: query
+ *           name: limit
+ *           schema:
+ *             type: integer
+ *           description: Maximum number of results to return (default is 50)
+ *           example: 20
+ *         - in: query
+ *           name: categoryId
+ *           schema:
+ *             type: integer
+ *           description: Filter by category ID
+ *           example: 1
+ *         - in: query
+ *           name: search
+ *           schema:
+ *             type: string
+ *           description: Search term for address
+ *           example: bus
+ *      responses:
+ *          200:
+ *              description: List of transport locations with distance
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/TransportLocationWithDistance'
+ *          400:
+ *              description: Invalid parameters
+ *          500:
+ *              description: Error server
+ */
+router.get('/nearby', transportLocationValidatorMiddleware.nearby, getTransportLocationsNearby);
 
 /**
  * @swagger
