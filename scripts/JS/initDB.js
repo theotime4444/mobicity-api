@@ -1,7 +1,4 @@
 import {execSync} from "child_process";
-import prisma from "../../database/databaseORM.js";
-import {importCSVData} from "./importCSV.js";
-import {seed} from "./seed.js";
 
 try {
     console.log('🗄️  Initialisation de la base de données avec Prisma...\n');
@@ -27,6 +24,12 @@ try {
         throw error;
     }
     
+    // IMPORTANT: Importer les modules APRÈS la génération du client Prisma
+    // car ils utilisent databaseORM.js qui crée un PrismaClient
+    const prisma = (await import("../../database/databaseORM.js")).default;
+    const {importCSVData} = await import("./importCSV.js");
+    const {seed} = await import("./seed.js");
+    
     // Étape 3: Seed des données initiales (catégories, véhicules, utilisateurs de test, etc.)
     await seed();
     
@@ -38,6 +41,12 @@ try {
     console.error('❌ Erreur lors de l\'initialisation:', e);
     process.exit(1);
 } finally {
-    await prisma.$disconnect();
+    // Importer prisma seulement si le client a été généré
+    try {
+        const prisma = (await import("../../database/databaseORM.js")).default;
+        await prisma.$disconnect();
+    } catch (e) {
+        // Ignorer si le client n'a pas été généré
+    }
 }
 
