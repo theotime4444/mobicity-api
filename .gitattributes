@@ -1,0 +1,8 @@
+# Assurer que les scripts shell utilisent des fins de ligne LF (Unix)
+*.sh text eol=lf
+
+# Assurer que les fichiers de configuration utilisent LF
+*.yml text eol=lf
+*.yaml text eol=lf
+Dockerfile text eol=lf
+
