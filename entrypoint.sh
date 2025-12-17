@@ -10,6 +10,16 @@ until pg_isready -h db -U mobicity -d mobicity_db > /dev/null 2>&1; do
 done
 echo "✅ Base de données prête !"
 
+# Toujours générer le client Prisma au démarrage
+# (nécessaire car le code est monté en volume et les binaires peuvent manquer)
+echo "🔧 Génération du client Prisma..."
+npx prisma generate
+if [ $? -ne 0 ]; then
+  echo "❌ Erreur lors de la génération du client Prisma"
+  exit 1
+fi
+echo "✅ Client Prisma généré !"
+
 # Vérifier si la base de données est déjà initialisée
 # On vérifie si la table "users" existe (créée par Prisma)
 echo "🔍 Vérification de l'initialisation de la base de données..."
@@ -25,7 +35,7 @@ if [ "$DB_INITIALIZED" != "t" ]; then
     exit 1
   fi
 else
-  echo "✅ Base de données déjà initialisée, passage au démarrage de l'API"
+  echo "✅ Base de données déjà initialisée"
 fi
 
 # Démarrer l'API
