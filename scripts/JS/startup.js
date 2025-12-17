@@ -1,27 +1,31 @@
 import { execSync } from "child_process";
 import { exec } from "child_process";
 import { promisify } from "util";
+import { existsSync } from "fs";
+import { join } from "path";
 
 const execAsync = promisify(exec);
 
 /**
- * Génère le client Prisma si nécessaire
+ * Génère le client Prisma (toujours au démarrage car le code est monté en volume)
  */
 function ensurePrismaClient() {
+  console.log("🔧 Génération du client Prisma...");
   try {
-    // Vérifier si le client est déjà généré
-    execSync("node -e \"require('@prisma/client')\"", { stdio: "ignore" });
-    return true;
-  } catch {
-    console.log("🔧 Génération du client Prisma...");
-    try {
-      execSync("npx prisma generate", { stdio: "inherit" });
-      console.log("✅ Client Prisma généré !");
-      return true;
-    } catch (error) {
-      console.error("❌ Erreur lors de la génération du client Prisma");
+    execSync("npx prisma generate", { stdio: "inherit" });
+    
+    // Vérifier que le client a bien été généré
+    const prismaClientPath = join(process.cwd(), "node_modules", ".prisma", "client", "index.js");
+    if (!existsSync(prismaClientPath)) {
+      console.error("❌ Le client Prisma n'a pas été généré correctement");
       return false;
     }
+    
+    console.log("✅ Client Prisma généré et vérifié !");
+    return true;
+  } catch (error) {
+    console.error("❌ Erreur lors de la génération du client Prisma:", error.message);
+    return false;
   }
 }
 

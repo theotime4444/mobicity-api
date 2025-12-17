@@ -19,6 +19,9 @@ ENV PRISMA_CLI_BINARY_TARGETS=linux-musl-openssl-3.0.x
 # Copier le reste des fichiers de l'application
 COPY . .
 
+# Générer le client Prisma lors du build (pour qu'il soit toujours disponible)
+RUN npx prisma generate
+
 # Exposer le port sur lequel l'API écoutera
 EXPOSE 3001
 
