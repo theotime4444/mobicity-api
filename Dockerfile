@@ -19,15 +19,9 @@ ENV PRISMA_CLI_BINARY_TARGETS=linux-musl-openssl-3.0.x
 # Copier le reste des fichiers de l'application
 COPY . .
 
-# Copier et rendre exécutable le script d'entrée
-# Convertir les fins de ligne Windows (CRLF) en Linux (LF) si nécessaire
-COPY entrypoint.sh /app/entrypoint.sh
-RUN sed -i 's/\r$//' /app/entrypoint.sh && \
-    chmod +x /app/entrypoint.sh
-
 # Exposer le port sur lequel l'API écoutera
 EXPOSE 3001
 
-# Utiliser le script d'entrée comme point d'entrée
-ENTRYPOINT ["/app/entrypoint.sh"]
+# Commande par défaut pour démarrer l'application
+CMD ["npm", "run", "dev"]
 

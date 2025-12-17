@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
+    "start": "node scripts/JS/startup.js && npm run dev",
     "initDB": "node scripts/JS/initDB.js",
     "seed": "node scripts/JS/seed.js",
     "hashPasswords": "node scripts/JS/hashPasswords.js",

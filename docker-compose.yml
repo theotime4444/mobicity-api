@@ -22,10 +22,11 @@ services:
       - JWT_SECRET=votre_secret_jwt_tres_securise_changez_en_production
       - PASSWORD_PEPPER=cecinestpasunpepper
     restart: unless-stopped
-    # Le script entrypoint.sh gère automatiquement l'initialisation et le démarrage
     depends_on:
       db:
         condition: service_healthy
+    # Utiliser le script npm start qui gère l'initialisation puis démarre l'API
+    command: npm run start
 
   # Base de données PostgreSQL
   db:
