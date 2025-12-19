@@ -124,9 +124,9 @@ async function seed() {
     } catch (error) {
         console.error(chalk.red.bold('[SEED] Erreur lors du seed:'), error);
         throw error;
-    } finally {
-        await prisma.$disconnect();
     }
+    // Note: Ne pas fermer la connexion ici si appelé depuis initDB.js
+    // La connexion sera fermée par initDB.js dans son bloc finally
 }
 
 // Exécuter le seed si le script est appelé directement
@@ -136,11 +136,19 @@ const isMainModule = import.meta.url === `file://${process.argv[1]}`.replace(/\\
 
 if (isMainModule) {
     seed()
-        .then(() => {
+        .then(async () => {
+            // Fermer la connexion seulement si appelé directement
+            await prisma.$disconnect();
             process.exit(0);
         })
-        .catch((error) => {
+        .catch(async (error) => {
             console.error(chalk.red.bold('[SEED] Erreur fatale:'), error);
+            // Fermer la connexion en cas d'erreur aussi
+            try {
+                await prisma.$disconnect();
+            } catch (e) {
+                // Ignorer les erreurs de déconnexion
+            }
             process.exit(1);
         });
 }

@@ -52,33 +52,61 @@ function parseCSV(filePath) {
 }
 
 /**
- * Importe les arrêts de bus depuis stops_bus.csv
+ * Importe les arrêts de bus depuis stops_bus.csv avec insertion par lots
  */
 async function importBusStops() {
     const csvPath = join(__dirname, '../data/stops_bus.csv');
     const stops = parseCSV(csvPath);
     
+    // Récupérer la catégorie "Arrêt de bus" par son nom (plus fiable que l'ID)
+    const busCategory = await prisma.category.findFirst({
+        where: { name: 'Arrêt de bus' }
+    });
+    
+    if (!busCategory) {
+        throw new Error('Catégorie "Arrêt de bus" introuvable. Assurez-vous que le seed a été exécuté.');
+    }
+    
     console.log(`📦 Importation de ${stops.length} arrêts de bus...`);
     
+    // Préparer les données pour l'insertion par lots
+    const batchSize = 1000; // Insérer 1000 enregistrements à la fois
     let imported = 0;
     let errors = 0;
     
-    for (const stop of stops) {
+    // Traiter par lots
+    for (let i = 0; i < stops.length; i += batchSize) {
+        const batch = stops.slice(i, i + batchSize);
+        
+        // Préparer les données du lot
+        const dataToInsert = batch.map(stop => ({
+            categoryId: busCategory.id,
+            address: stop.stop_name || null,
+            latitude: stop.stop_lat ? parseFloat(stop.stop_lat) : null,
+            longitude: stop.stop_lon ? parseFloat(stop.stop_lon) : null
+        })).filter(item => item.latitude !== null && item.longitude !== null); // Filtrer les données invalides
+        
         try {
-            // Catégorie "Arrêt de bus" = id 1
-            await prisma.transportLocation.create({
-                data: {
-                    categoryId: 1, // Arrêt de bus
-                    address: stop.stop_name || null,
-                    latitude: stop.stop_lat ? parseFloat(stop.stop_lat) : null,
-                    longitude: stop.stop_lon ? parseFloat(stop.stop_lon) : null
-                }
+            // Insérer le lot en une seule requête
+            await prisma.transportLocation.createMany({
+                data: dataToInsert,
+                skipDuplicates: true // Ignorer les doublons si nécessaire
             });
-            imported++;
+            imported += dataToInsert.length;
+            
+            // Afficher la progression tous les 5000 enregistrements
+            if ((i + batchSize) % 5000 === 0 || i + batchSize >= stops.length) {
+                console.log(`   Progression: ${Math.min(i + batchSize, stops.length)}/${stops.length} arrêts traités...`);
+            }
         } catch (err) {
-            errors++;
-            if (errors <= 5) { // Afficher seulement les 5 premières erreurs
-                console.error(`Erreur lors de l'importation de ${stop.stop_name}:`, err.message);
+            // En cas d'erreur sur un lot, essayer d'insérer un par un pour identifier les problèmes
+            console.error(`Erreur lors de l'importation du lot ${Math.floor(i / batchSize) + 1}:`, err.message);
+            errors += batch.length;
+            
+            // Si trop d'erreurs, arrêter
+            if (errors > 100) {
+                console.error('⚠️  Trop d\'erreurs, arrêt de l\'importation');
+                break;
             }
         }
     }
@@ -88,33 +116,61 @@ async function importBusStops() {
 }
 
 /**
- * Importe les arrêts de train depuis stops_train.csv
+ * Importe les arrêts de train depuis stops_train.csv avec insertion par lots
  */
 async function importTrainStops() {
     const csvPath = join(__dirname, '../data/stops_train.csv');
     const stops = parseCSV(csvPath);
     
+    // Récupérer la catégorie "Gare" par son nom (plus fiable que l'ID)
+    const trainCategory = await prisma.category.findFirst({
+        where: { name: 'Gare' }
+    });
+    
+    if (!trainCategory) {
+        throw new Error('Catégorie "Gare" introuvable. Assurez-vous que le seed a été exécuté.');
+    }
+    
     console.log(`🚂 Importation de ${stops.length} arrêts de train...`);
     
+    // Préparer les données pour l'insertion par lots
+    const batchSize = 1000; // Insérer 1000 enregistrements à la fois
     let imported = 0;
     let errors = 0;
     
-    for (const stop of stops) {
+    // Traiter par lots
+    for (let i = 0; i < stops.length; i += batchSize) {
+        const batch = stops.slice(i, i + batchSize);
+        
+        // Préparer les données du lot
+        const dataToInsert = batch.map(stop => ({
+            categoryId: trainCategory.id,
+            address: stop.stop_name || null,
+            latitude: stop.stop_lat ? parseFloat(stop.stop_lat) : null,
+            longitude: stop.stop_lon ? parseFloat(stop.stop_lon) : null
+        })).filter(item => item.latitude !== null && item.longitude !== null); // Filtrer les données invalides
+        
         try {
-            // Catégorie "Gare" = id 2
-            await prisma.transportLocation.create({
-                data: {
-                    categoryId: 2, // Gare
-                    address: stop.stop_name || null,
-                    latitude: stop.stop_lat ? parseFloat(stop.stop_lat) : null,
-                    longitude: stop.stop_lon ? parseFloat(stop.stop_lon) : null
-                }
+            // Insérer le lot en une seule requête
+            await prisma.transportLocation.createMany({
+                data: dataToInsert,
+                skipDuplicates: true // Ignorer les doublons si nécessaire
             });
-            imported++;
+            imported += dataToInsert.length;
+            
+            // Afficher la progression tous les 5000 enregistrements
+            if ((i + batchSize) % 5000 === 0 || i + batchSize >= stops.length) {
+                console.log(`   Progression: ${Math.min(i + batchSize, stops.length)}/${stops.length} arrêts traités...`);
+            }
         } catch (err) {
-            errors++;
-            if (errors <= 5) { // Afficher seulement les 5 premières erreurs
-                console.error(`Erreur lors de l'importation de ${stop.stop_name}:`, err.message);
+            // En cas d'erreur sur un lot, essayer d'insérer un par un pour identifier les problèmes
+            console.error(`Erreur lors de l'importation du lot ${Math.floor(i / batchSize) + 1}:`, err.message);
+            errors += batch.length;
+            
+            // Si trop d'erreurs, arrêter
+            if (errors > 100) {
+                console.error('⚠️  Trop d\'erreurs, arrêt de l\'importation');
+                break;
             }
         }
     }
@@ -143,20 +199,28 @@ async function importCSVData() {
     } catch (err) {
         console.error('❌ Erreur lors de l\'importation:', err);
         throw err;
-    } finally {
-        await prisma.$disconnect();
     }
+    // Note: Ne pas fermer la connexion ici si appelé depuis initDB.js
+    // La connexion sera fermée par initDB.js dans son bloc finally
 }
 
 // Exécuter si appelé directement (vérifie si le fichier est exécuté en ligne de commande)
 if (import.meta.url === `file://${process.argv[1]}`.replace(/\\/g, '/') || 
     process.argv[1]?.includes('importCSV.js')) {
     importCSVData()
-        .then(() => {
+        .then(async () => {
+            // Fermer la connexion seulement si appelé directement
+            await prisma.$disconnect();
             process.exit(0);
         })
-        .catch((err) => {
+        .catch(async (err) => {
             console.error(err);
+            // Fermer la connexion en cas d'erreur aussi
+            try {
+                await prisma.$disconnect();
+            } catch (e) {
+                // Ignorer les erreurs de déconnexion
+            }
             process.exit(1);
         });
 }
