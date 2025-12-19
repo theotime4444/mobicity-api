@@ -50,7 +50,7 @@ const userToAddSchema = vine.object({
     lastName: vine.string().trim().minLength(1),
     email: vine.string().trim().email(),
     password: vine.string().minLength(6),
-    isAdmin: vine.boolean().optional() // Optionnel pour les admins
+    isAdmin: vine.boolean().optional()
 });
 
 const userToUpdateSchema = vine.object({

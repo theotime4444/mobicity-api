@@ -30,6 +30,12 @@ const router = Router();
  *      responses:
  *          200:
  *              description: List of categories
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Category'
  *          401:
  *              $ref: '#/components/responses/UnauthorizedError'
  *          403:
@@ -59,6 +65,10 @@ router.get('/', getAllCategories);
  *      responses:
  *          200:
  *              description: Category information
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Category'
  *          400:
  *              description: Invalid ID
  *          401:
@@ -91,6 +101,10 @@ router.get('/:id', getCategory);
  *      responses:
  *          201:
  *              description: Category created successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Category'
  *          400:
  *              description: Validation error
  *          401:

@@ -11,6 +11,13 @@ const router = Router();
  *          - Vehicle
  *      summary: Get all vehicles
  *      description: Returns a list of all vehicles (public)
+ *      parameters:
+ *         - in: query
+ *           name: search
+ *           schema:
+ *             type: string
+ *           description: Search term to filter vehicles by brand or model
+ *           example: "bus"
  *      responses:
  *          200:
  *              description: List of vehicles

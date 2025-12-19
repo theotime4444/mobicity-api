@@ -77,7 +77,6 @@ export const deleteUser = async (id) => {
     });
 };
 
-// Liste tous les utilisateurs (admin)
 export const readAllUsers = async ({limit = 50, offset = 0, search}) => {
     const where = {};
     
@@ -107,7 +106,6 @@ export const readAllUsers = async ({limit = 50, offset = 0, search}) => {
     return users;
 };
 
-// Authentication functions
 export const readUserAuth = async ({email, password}) => {
     const utilisateur = await prisma.user.findUnique({
         where: {
@@ -117,7 +115,6 @@ export const readUserAuth = async ({email, password}) => {
 
     if (utilisateur && utilisateur.password) {
         try {
-            // Vérification du mot de passe avec Argon2id et pepper
             const isValid = await compare(password, utilisateur.password);
             
             if (isValid) {
@@ -130,7 +127,6 @@ export const readUserAuth = async ({email, password}) => {
                 return {id: null, isAdmin: null};
             }
         } catch (err) {
-            console.error("Erreur lors de la vérification du mot de passe:", err);
             return {id: null, isAdmin: null};
         }
     } else {

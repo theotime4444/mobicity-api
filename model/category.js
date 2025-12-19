@@ -51,9 +51,7 @@ export const updateCategory = async (id, {name}) => {
 };
 
 export const deleteCategory = async (id) => {
-    // Transaction pour garantir l'atomicité de la suppression
     return await prisma.$transaction(async (tx) => {
-        // Vérifier que la Category existe
         const category = await tx.category.findUnique({
             where: { id },
             include: {
@@ -67,15 +65,12 @@ export const deleteCategory = async (id) => {
             throw new Error('Category not found');
         }
         
-        // Compter les TransportLocation associés avant suppression
         const transportLocationCount = category.transportLocations.length;
         
-        // Supprimer la Category (cascade automatique des TransportLocation via Prisma)
         await tx.category.delete({
             where: { id }
         });
         
-        // Retourner le nombre de TransportLocation supprimés
         return {
             deletedCategory: true,
             deletedTransportLocations: transportLocationCount

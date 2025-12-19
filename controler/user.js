@@ -1,4 +1,5 @@
 import * as userModel from "../model/user.js";
+import chalk from "chalk";
 
 export const getUser = async (req, res) => {
     try {
@@ -14,7 +15,7 @@ export const getUser = async (req, res) => {
             res.sendStatus(404);
         }
     } catch (err) {
-        console.error(err);
+        console.error(chalk.red.bold('[USER] Erreur:'), err);
         res.sendStatus(500);
     }
 };
@@ -29,12 +30,11 @@ export const getCurrentUser = async (req, res) => {
             res.sendStatus(404);
         }
     } catch (err) {
-        console.error(err);
+        console.error(chalk.red.bold('[USER] Erreur:'), err);
         res.sendStatus(500);
     }
 };
 
-// Pour route auth/register (inscription publique)
 export const addUser = async (req, res) => {
     try {
         const {firstName, lastName, email, password} = req.val;
@@ -50,7 +50,7 @@ export const addUser = async (req, res) => {
             message: "Inscription réussie"
         });
     } catch (err) {
-        console.error(err);
+        console.error(chalk.red.bold('[USER] Erreur:'), err);
         if(err.code === 'P2002') {
             return res.status(409).json({error: "Cet email est déjà utilisé"});
         }
@@ -58,7 +58,6 @@ export const addUser = async (req, res) => {
     }
 };
 
-// Pour route admin (création avec isAdmin possible)
 export const createUser = async (req, res) => {
     try {
         const {firstName, lastName, email, password, isAdmin = false} = req.val;
@@ -71,7 +70,7 @@ export const createUser = async (req, res) => {
         const user = await userModel.createUser({firstName, lastName, email, password, isAdmin});
         res.status(201).json(user);
     } catch (err) {
-        console.error(err);
+        console.error(chalk.red.bold('[USER] Erreur:'), err);
         if(err.code === 'P2002') {
             return res.status(409).json({error: "Cet email est déjà utilisé"});
         }
@@ -85,7 +84,7 @@ export const updateUser = async (req, res) => {
         await userModel.updateUser(id, {firstName, lastName, email, password, isAdmin});
         res.sendStatus(204);
     } catch (e) {
-        console.error(e);
+        console.error(chalk.red.bold('[USER] Erreur:'), e);
         if(e.message === 'No field given') {
             return res.sendStatus(400);
         }
@@ -102,7 +101,7 @@ export const updateCurrentUser = async (req, res) => {
         await userModel.updateUser(userId, {firstName, lastName, email, password});
         res.sendStatus(204);
     } catch (e) {
-        console.error(e);
+        console.error(chalk.red.bold('[USER] Erreur:'), e);
         if(e.message === 'No field given') {
             return res.sendStatus(400);
         }
@@ -116,7 +115,7 @@ export const updateUserByAdmin = async (req, res) => {
         await userModel.updateUser(id, {firstName, lastName, email, password, isAdmin});
         res.sendStatus(204);
     } catch (err) {
-        console.error(err);
+        console.error(chalk.red.bold('[USER] Erreur:'), err);
         if(err.message === 'No field given') {
             return res.sendStatus(400);
         }
@@ -134,19 +133,18 @@ export const deleteUser = async (req, res) => {
         await userModel.deleteUser(id);
         res.sendStatus(204);
     } catch (e) {
-        console.error(e);
+        console.error(chalk.red.bold('[USER] Erreur:'), e);
         res.sendStatus(500);
     }
 };
 
-// Pour route admin (liste tous les utilisateurs avec pagination)
 export const getAllUsers = async (req, res) => {
     try {
         const {limit = 50, offset = 0, search} = req.query;
         const users = await userModel.readAllUsers({limit, offset, search});
         res.json(users);
     } catch (err) {
-        console.error(err);
+        console.error(chalk.red.bold('[USER] Erreur:'), err);
         res.sendStatus(500);
     }
 };

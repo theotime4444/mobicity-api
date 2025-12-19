@@ -35,6 +35,12 @@ const router = Router();
  *      responses:
  *          200:
  *              description: List of favorites
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Favorite'
  *          401:
  *              $ref: '#/components/responses/UnauthorizedError'
  *          403:
@@ -64,6 +70,12 @@ router.get('/', getAllFavorites);
  *      responses:
  *          200:
  *              description: List of favorites
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Favorite'
  *          400:
  *              description: Invalid user ID
  *          401:

@@ -52,7 +52,6 @@ export const deleteFavorite = async ({userId, transportLocationId}) => {
     });
 };
 
-// Liste tous les favoris (admin)
 export const readAllFavorites = async ({limit = 50, offset = 0, userId}) => {
     const where = {};
     if(userId) {

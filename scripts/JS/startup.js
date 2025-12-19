@@ -3,35 +3,29 @@ import { exec } from "child_process";
 import { promisify } from "util";
 import { existsSync } from "fs";
 import { join } from "path";
+import chalk from "chalk";
 
 const execAsync = promisify(exec);
 
-/**
- * Génère le client Prisma (toujours au démarrage car le code est monté en volume)
- */
 function ensurePrismaClient() {
-  console.log("🔧 Génération du client Prisma...");
+  console.log(chalk.cyan("[STARTUP] Génération du client Prisma..."));
   try {
     execSync("npx prisma generate", { stdio: "inherit" });
     
-    // Vérifier que le client a bien été généré
     const prismaClientPath = join(process.cwd(), "node_modules", ".prisma", "client", "index.js");
     if (!existsSync(prismaClientPath)) {
-      console.error("❌ Le client Prisma n'a pas été généré correctement");
+      console.error(chalk.red.bold("[STARTUP] Le client Prisma n'a pas été généré correctement"));
       return false;
     }
     
-    console.log("✅ Client Prisma généré et vérifié !");
+    console.log(chalk.green("[STARTUP] Client Prisma généré et vérifié !"));
     return true;
   } catch (error) {
-    console.error("❌ Erreur lors de la génération du client Prisma:", error.message);
+    console.error(chalk.red.bold("[STARTUP] Erreur lors de la génération du client Prisma:"), error.message);
     return false;
   }
 }
 
-/**
- * Attend que la base de données soit prête
- */
 async function waitForDatabase(maxRetries = 30, delay = 2000) {
   for (let i = 0; i < maxRetries; i++) {
     try {
@@ -49,9 +43,6 @@ async function waitForDatabase(maxRetries = 30, delay = 2000) {
   }
 }
 
-/**
- * Vérifie si la base de données est initialisée
- */
 async function isDatabaseInitialized() {
   try {
     const { stdout } = await execAsync(
@@ -63,9 +54,6 @@ async function isDatabaseInitialized() {
   }
 }
 
-/**
- * Initialise la base de données si nécessaire
- */
 async function initializeDatabase() {
   try {
     await waitForDatabase();
@@ -73,47 +61,41 @@ async function initializeDatabase() {
     const initialized = await isDatabaseInitialized();
     
     if (!initialized) {
-      console.log("📦 Initialisation de la base de données...");
+      console.log(chalk.cyan("[STARTUP] Initialisation de la base de données..."));
       execSync("npm run initDB", { stdio: "inherit" });
-      console.log("✅ Base de données initialisée !");
+      console.log(chalk.green("[STARTUP] Base de données initialisée !"));
     }
   } catch (error) {
-    console.error("⚠️  Erreur lors de l'initialisation:", error.message);
-      console.log("💡 Vous pouvez initialiser manuellement avec: docker compose exec api npm run initDB");
+    console.error(chalk.yellow("[STARTUP] Erreur lors de l'initialisation:"), error.message);
+    console.log(chalk.yellow("[STARTUP] Vous pouvez initialiser manuellement avec: docker compose exec api npm run initDB"));
   }
 }
 
-/**
- * Fonction principale
- */
 async function main() {
   try {
-    // Générer Prisma si nécessaire (critique, doit réussir)
     if (!ensurePrismaClient()) {
-      console.error("❌ Impossible de générer le client Prisma");
+      console.error(chalk.red.bold("[STARTUP] Impossible de générer le client Prisma"));
       process.exit(1);
     }
     
-    // Initialiser la DB si nécessaire (non critique, peut échouer)
     try {
       await initializeDatabase();
     } catch (error) {
-      console.warn("⚠️  L'initialisation automatique a échoué, mais l'API va démarrer quand même");
-      console.log("💡 Initialisez manuellement avec: docker compose exec api npm run initDB");
+      console.warn(chalk.yellow("[STARTUP] L'initialisation automatique a échoué, mais l'API va démarrer quand même"));
+      console.log(chalk.yellow("[STARTUP] Initialisez manuellement avec: docker compose exec api npm run initDB"));
     }
     
-    console.log("✅ Initialisation terminée");
+    console.log(chalk.green("[STARTUP] Initialisation terminée"));
   } catch (error) {
-    console.error("❌ Erreur critique:", error.message);
+    console.error(chalk.red.bold("[STARTUP] Erreur critique:"), error.message);
     process.exit(1);
   }
 }
 
-// Toujours exécuter et se terminer avec exit 0 (sauf erreur critique Prisma)
 main().then(() => {
   process.exit(0);
 }).catch((error) => {
-  console.error("❌ Erreur fatale:", error);
+  console.error(chalk.red.bold("[STARTUP] Erreur fatale:"), error);
   process.exit(1);
 });
 

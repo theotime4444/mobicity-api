@@ -9,7 +9,6 @@ import favoriteRouter from "./favorite.js";
 
 const router = Router();
 
-// Protection globale : toutes les routes /v1/admin/* nécessitent checkJWT + admin
 router.use(checkJWT);
 router.use(admin);
 

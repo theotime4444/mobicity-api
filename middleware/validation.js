@@ -92,7 +92,6 @@ export const transportLocationValidatorMiddleware = {
     },
     nearby: async (req, res, next) => {
         try {
-            // Convertir les query params en nombres si nécessaire
             const queryData = {
                 latitude: req.query.latitude ? parseFloat(req.query.latitude) : undefined,
                 longitude: req.query.longitude ? parseFloat(req.query.longitude) : undefined,

@@ -56,9 +56,7 @@ export const updateVehicle = async (id, {brand, model}) => {
 };
 
 export const deleteVehicle = async (id) => {
-    // Transaction pour garantir l'atomicité de la suppression
     return await prisma.$transaction(async (tx) => {
-        // Vérifier que le Vehicle existe
         const vehicle = await tx.vehicle.findUnique({
             where: { id },
             include: {
@@ -72,15 +70,12 @@ export const deleteVehicle = async (id) => {
             throw new Error('Vehicle not found');
         }
         
-        // Compter les TransportLocation associés avant suppression
         const transportLocationCount = vehicle.transportLocations.length;
         
-        // Supprimer le Vehicle (cascade automatique des TransportLocation via Prisma)
         await tx.vehicle.delete({
             where: { id }
         });
         
-        // Retourner le nombre de TransportLocation supprimés
         return {
             deletedVehicle: true,
             deletedTransportLocations: transportLocationCount

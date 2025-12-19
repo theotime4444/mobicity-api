@@ -30,6 +30,12 @@ const router = Router();
  *      responses:
  *          200:
  *              description: List of vehicles
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/Vehicle'
  *          401:
  *              $ref: '#/components/responses/UnauthorizedError'
  *          403:
@@ -59,6 +65,10 @@ router.get('/', getAllVehicles);
  *      responses:
  *          200:
  *              description: Vehicle information
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Vehicle'
  *          400:
  *              description: Invalid ID
  *          401:
@@ -91,6 +101,10 @@ router.get('/:id', getVehicle);
  *      responses:
  *          201:
  *              description: Vehicle created successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/Vehicle'
  *          400:
  *              description: Validation error
  *          401:

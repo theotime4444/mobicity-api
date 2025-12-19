@@ -26,11 +26,19 @@ const router = Router();
  *           schema:
  *             type: integer
  *           description: Maximum number of results to return
+ *           example: 10
  *         - in: query
  *           name: offset
  *           schema:
  *             type: integer
  *           description: Number of results to skip
+ *           example: 0
+ *         - in: query
+ *           name: categoryId
+ *           schema:
+ *             type: integer
+ *           description: Filter by category ID
+ *           example: 1
  *         - in: query
  *           name: search
  *           schema:
@@ -69,6 +77,10 @@ router.get('/', getTransportLocations);
  *      responses:
  *          200:
  *              description: Transport location information
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/TransportLocation'
  *          400:
  *              description: Invalid ID
  *          401:
@@ -101,6 +113,10 @@ router.get('/:id', getTransportLocation);
  *      responses:
  *          201:
  *              description: Transport location created successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/TransportLocation'
  *          400:
  *              description: Validation error
  *          401:

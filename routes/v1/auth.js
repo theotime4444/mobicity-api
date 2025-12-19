@@ -3,6 +3,7 @@ import {login} from "../../controler/auth.js";
 import {addUser} from "../../controler/user.js";
 import {userValidatorMiddleware} from "../../middleware/validation.js";
 import vine from '@vinejs/vine';
+import chalk from 'chalk';
 
 /**
  * @swagger
@@ -53,7 +54,7 @@ const validateLogin = async (req, res, next) => {
         req.val = validated;
         next();
     } catch (error) {
-        console.error(error);
+        console.error(chalk.red.bold('[AUTH] Erreur de validation:'), error);
         res.status(400).json({error: "Validation error", details: error.messages});
     }
 };

@@ -1,4 +1,5 @@
 import * as categoryModel from "../model/category.js";
+import chalk from "chalk";
 
 export const getCategory = async (req, res) => {
     try {
@@ -14,7 +15,7 @@ export const getCategory = async (req, res) => {
             res.sendStatus(404);
         }
     } catch (err) {
-        console.error(err);
+        console.error(chalk.red.bold('[CATEGORY] Erreur:'), err);
         res.sendStatus(500);
     }
 };
@@ -25,7 +26,7 @@ export const getAllCategories = async (req, res) => {
         const categories = await categoryModel.readAllCategories({search});
         res.json(categories);
     } catch (err) {
-        console.error(err);
+        console.error(chalk.red.bold('[CATEGORY] Erreur:'), err);
         res.sendStatus(500);
     }
 };
@@ -36,7 +37,7 @@ export const addCategory = async (req, res) => {
         const category = await categoryModel.createCategory({name});
         res.status(201).json(category);
     } catch (err) {
-        console.error(err);
+        console.error(chalk.red.bold('[CATEGORY] Erreur:'), err);
         res.sendStatus(500);
     }
 };
@@ -47,7 +48,7 @@ export const updateCategory = async (req, res) => {
         await categoryModel.updateCategory(id, {name});
         res.sendStatus(204);
     } catch (e) {
-        console.error(e);
+        console.error(chalk.red.bold('[CATEGORY] Erreur:'), e);
         if(e.message === 'No field given') {
             return res.sendStatus(400);
         }
@@ -65,7 +66,7 @@ export const deleteCategory = async (req, res) => {
         const result = await categoryModel.deleteCategory(id);
         res.status(200).json(result);
     } catch (e) {
-        console.error(e);
+        console.error(chalk.red.bold('[CATEGORY] Erreur:'), e);
         if(e.message === 'Category not found') {
             return res.sendStatus(404);
         }

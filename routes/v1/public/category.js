@@ -11,6 +11,13 @@ const router = Router();
  *          - Category
  *      summary: Get all categories
  *      description: Returns a list of all transport location categories (public)
+ *      parameters:
+ *         - in: query
+ *           name: search
+ *           schema:
+ *             type: string
+ *           description: Search term to filter categories by name
+ *           example: "bus"
  *      responses:
  *          200:
  *              description: List of categories

@@ -42,6 +42,12 @@ const router = Router();
  *      responses:
  *          200:
  *              description: List of users
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/User'
  *          401:
  *              $ref: '#/components/responses/UnauthorizedError'
  *          403:
@@ -107,6 +113,10 @@ router.get('/:id', getUser);
  *      responses:
  *          201:
  *              description: User created successfully
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/User'
  *          400:
  *              description: Validation error
  *          401:

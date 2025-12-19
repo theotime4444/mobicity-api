@@ -1,5 +1,6 @@
 import {readUserAuth} from "../model/user.js";
 import jwt from "jsonwebtoken";
+import chalk from "chalk";
 
 /**
  * @swagger
@@ -53,7 +54,7 @@ export const login = async (req, res) => {
             res.sendStatus(401);
         }
     } catch (err) {
-        console.error(err);
+        console.error(chalk.red.bold('[AUTH] Erreur:'), err);
         res.sendStatus(500);
     }
 };

@@ -1,4 +1,5 @@
 import * as transportLocationModel from "../model/transportLocation.js";
+import chalk from "chalk";
 
 export const getTransportLocation = async (req, res) => {
     try {
@@ -14,7 +15,7 @@ export const getTransportLocation = async (req, res) => {
             res.sendStatus(404);
         }
     } catch (err) {
-        console.error(err);
+        console.error(chalk.red.bold('[TRANSPORT_LOCATION] Erreur:'), err);
         res.sendStatus(500);
     }
 };
@@ -30,7 +31,7 @@ export const getTransportLocations = async (req, res) => {
         });
         res.json(transportLocations);
     } catch (err) {
-        console.error(err);
+        console.error(chalk.red.bold('[TRANSPORT_LOCATION] Erreur:'), err);
         res.sendStatus(500);
     }
 };
@@ -47,7 +48,7 @@ export const addTransportLocation = async (req, res) => {
         });
         res.status(201).json(transportLocation);
     } catch (err) {
-        console.error(err);
+        console.error(chalk.red.bold('[TRANSPORT_LOCATION] Erreur:'), err);
         res.sendStatus(500);
     }
 };
@@ -64,7 +65,7 @@ export const updateTransportLocation = async (req, res) => {
         });
         res.sendStatus(204);
     } catch (e) {
-        console.error(e);
+        console.error(chalk.red.bold('[TRANSPORT_LOCATION] Erreur:'), e);
         if(e.message === 'No field given') {
             return res.sendStatus(400);
         }
@@ -82,7 +83,7 @@ export const deleteTransportLocation = async (req, res) => {
         await transportLocationModel.deleteTransportLocation(id);
         res.sendStatus(204);
     } catch (e) {
-        console.error(e);
+        console.error(chalk.red.bold('[TRANSPORT_LOCATION] Erreur:'), e);
         res.sendStatus(500);
     }
 };
@@ -91,7 +92,6 @@ export const getTransportLocationsNearby = async (req, res) => {
     try {
         const {latitude, longitude, radius, limit, categoryId, search} = req.val;
         
-        // Validation supplémentaire : radius nécessite latitude/longitude
         if (radius !== undefined && (latitude === undefined || longitude === undefined)) {
             return res.status(400).json({error: "radius requires latitude and longitude"});
         }
@@ -107,7 +107,7 @@ export const getTransportLocationsNearby = async (req, res) => {
         
         res.json(transportLocations);
     } catch (err) {
-        console.error(err);
+        console.error(chalk.red.bold('[TRANSPORT_LOCATION] Erreur:'), err);
         res.sendStatus(500);
     }
 };
