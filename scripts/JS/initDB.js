@@ -27,18 +27,21 @@ try {
             await tx.vehicle.deleteMany();
         });
         console.log(chalk.green('[INIT] Toutes les anciennes données ont été supprimées'));
-        
-        // Réinitialisation des séquences d'auto-incrémentation
-        console.log(chalk.cyan('[INIT] Réinitialisation des séquences d\'auto-incrémentation...'));
-        await prisma.$executeRawUnsafe(`
-            ALTER SEQUENCE users_id_seq RESTART WITH 1;
-            ALTER SEQUENCE categories_id_seq RESTART WITH 1;
-            ALTER SEQUENCE vehicles_id_seq RESTART WITH 1;
-            ALTER SEQUENCE transport_locations_id_seq RESTART WITH 1;
-        `);
-        console.log(chalk.green('[INIT] Séquences réinitialisées\n'));
     } catch (error) {
         console.error(chalk.red.bold('[INIT] Erreur lors de la suppression des données:'), error.message);
+        throw error;
+    }
+    
+    // Réinitialisation des séquences d'auto-incrémentation
+    console.log(chalk.cyan('[INIT] Réinitialisation des séquences d\'auto-incrémentation...'));
+    try {
+        await prisma.$executeRawUnsafe(`ALTER SEQUENCE users_id_seq RESTART WITH 1`);
+        await prisma.$executeRawUnsafe(`ALTER SEQUENCE categories_id_seq RESTART WITH 1`);
+        await prisma.$executeRawUnsafe(`ALTER SEQUENCE vehicles_id_seq RESTART WITH 1`);
+        await prisma.$executeRawUnsafe(`ALTER SEQUENCE transport_locations_id_seq RESTART WITH 1`);
+        console.log(chalk.green('[INIT] Séquences réinitialisées\n'));
+    } catch (error) {
+        console.error(chalk.red.bold('[INIT] Erreur lors de la réinitialisation des séquences:'), error.message);
         throw error;
     }
     
