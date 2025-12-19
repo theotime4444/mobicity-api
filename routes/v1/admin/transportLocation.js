@@ -31,6 +31,12 @@ const router = Router();
  *           schema:
  *             type: integer
  *           description: Number of results to skip
+ *         - in: query
+ *           name: search
+ *           schema:
+ *             type: string
+ *           description: Search term to filter transport locations by address or category name
+ *           example: "gare"
  *      responses:
  *          200:
  *              description: List of transport locations

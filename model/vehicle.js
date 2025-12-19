@@ -20,8 +20,18 @@ export const readVehicle = async (id) => {
     return vehicule;
 };
 
-export const readAllVehicles = async () => {
+export const readAllVehicles = async ({search} = {}) => {
+    const where = {};
+    
+    if(search){
+        where.OR = [
+            { brand: { contains: search, mode: 'insensitive' } },
+            { model: { contains: search, mode: 'insensitive' } }
+        ];
+    }
+    
     const vehicules = await prisma.vehicle.findMany({
+        where,
         orderBy: {
             id: 'asc'
         }

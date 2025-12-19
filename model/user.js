@@ -78,8 +78,19 @@ export const deleteUser = async (id) => {
 };
 
 // Liste tous les utilisateurs (admin)
-export const readAllUsers = async ({limit = 50, offset = 0}) => {
+export const readAllUsers = async ({limit = 50, offset = 0, search}) => {
+    const where = {};
+    
+    if(search){
+        where.OR = [
+            { firstName: { contains: search, mode: 'insensitive' } },
+            { lastName: { contains: search, mode: 'insensitive' } },
+            { email: { contains: search, mode: 'insensitive' } }
+        ];
+    }
+    
     const users = await prisma.user.findMany({
+        where,
         take: parseInt(limit),
         skip: parseInt(offset),
         select: {

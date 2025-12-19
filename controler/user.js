@@ -142,8 +142,8 @@ export const deleteUser = async (req, res) => {
 // Pour route admin (liste tous les utilisateurs avec pagination)
 export const getAllUsers = async (req, res) => {
     try {
-        const {limit = 50, offset = 0} = req.query;
-        const users = await userModel.readAllUsers({limit, offset});
+        const {limit = 50, offset = 0, search} = req.query;
+        const users = await userModel.readAllUsers({limit, offset, search});
         res.json(users);
     } catch (err) {
         console.error(err);

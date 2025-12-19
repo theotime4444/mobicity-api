@@ -79,7 +79,7 @@ async function initializeDatabase() {
     }
   } catch (error) {
     console.error("⚠️  Erreur lors de l'initialisation:", error.message);
-    console.log("💡 Vous pouvez initialiser manuellement avec: docker-compose exec api npm run initDB");
+      console.log("💡 Vous pouvez initialiser manuellement avec: docker compose exec api npm run initDB");
   }
 }
 
@@ -99,7 +99,7 @@ async function main() {
       await initializeDatabase();
     } catch (error) {
       console.warn("⚠️  L'initialisation automatique a échoué, mais l'API va démarrer quand même");
-      console.log("💡 Initialisez manuellement avec: docker-compose exec api npm run initDB");
+      console.log("💡 Initialisez manuellement avec: docker compose exec api npm run initDB");
     }
     
     console.log("✅ Initialisation terminée");

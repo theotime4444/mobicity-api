@@ -61,7 +61,7 @@ Avant de tester les routes protégées, vous devez définir les variables suivan
 
 1. **Démarrer l'API** :
    ```bash
-   docker-compose up
+   docker compose up
    ```
 
 2. **Tester les routes publiques** directement

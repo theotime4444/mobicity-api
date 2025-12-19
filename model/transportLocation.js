@@ -36,8 +36,8 @@ export const readTransportLocations = async ({limit, offset, categoryId, search}
     
     if(search){
         where.OR = [
-            { address: { contains: search } },
-            { category: { name: { contains: search } } }
+            { address: { contains: search, mode: 'insensitive' } },
+            { category: { name: { contains: search, mode: 'insensitive' } } }
         ];
     }
     

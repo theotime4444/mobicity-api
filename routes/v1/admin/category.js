@@ -19,7 +19,14 @@ const router = Router();
  *      tags:
  *          - Admin
  *      summary: Get all categories (Admin only)
- *      description: Returns a list of all categories
+ *      description: Returns a list of all categories with optional search filtering
+ *      parameters:
+ *         - in: query
+ *           name: search
+ *           schema:
+ *             type: string
+ *           description: Search term to filter categories by name
+ *           example: "bus"
  *      responses:
  *          200:
  *              description: List of categories

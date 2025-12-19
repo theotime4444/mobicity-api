@@ -21,7 +21,8 @@ export const getVehicle = async (req, res) => {
 
 export const getAllVehicles = async (req, res) => {
     try {
-        const vehicles = await vehicleModel.readAllVehicles();
+        const {search} = req.query;
+        const vehicles = await vehicleModel.readAllVehicles({search});
         res.json(vehicles);
     } catch (err) {
         console.error(err);

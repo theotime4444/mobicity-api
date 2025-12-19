@@ -19,8 +19,15 @@ export const readCategory = async (id) => {
     return categorie;
 };
 
-export const readAllCategories = async () => {
+export const readAllCategories = async ({search} = {}) => {
+    const where = {};
+    
+    if(search){
+        where.name = { contains: search, mode: 'insensitive' };
+    }
+    
     const categories = await prisma.category.findMany({
+        where,
         orderBy: {
             id: 'asc'
         }

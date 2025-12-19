@@ -19,7 +19,14 @@ const router = Router();
  *      tags:
  *          - Admin
  *      summary: Get all vehicles (Admin only)
- *      description: Returns a list of all vehicles
+ *      description: Returns a list of all vehicles with optional search filtering
+ *      parameters:
+ *         - in: query
+ *           name: search
+ *           schema:
+ *             type: string
+ *           description: Search term to filter vehicles by brand or model
+ *           example: "bus"
  *      responses:
  *          200:
  *              description: List of vehicles

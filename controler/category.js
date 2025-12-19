@@ -21,7 +21,8 @@ export const getCategory = async (req, res) => {
 
 export const getAllCategories = async (req, res) => {
     try {
-        const categories = await categoryModel.readAllCategories();
+        const {search} = req.query;
+        const categories = await categoryModel.readAllCategories({search});
         res.json(categories);
     } catch (err) {
         console.error(err);

@@ -30,6 +30,26 @@ try {
     const {importCSVData} = await import("./importCSV.js");
     const {seed} = await import("./seed.js");
     
+    // Étape 0: Réinitialiser complètement la base de données
+    console.log('🗑️  Réinitialisation de la base de données...');
+    try {
+        // Ordre de suppression respectant les clés étrangères :
+        // 1. Favoris (dépend de User et TransportLocation)
+        // 2. TransportLocations (dépend de Category et Vehicle)
+        // 3. Users (indépendant)
+        // 4. Categories (indépendant)
+        // 5. Vehicles (indépendant)
+        await prisma.favorite.deleteMany();
+        await prisma.transportLocation.deleteMany();
+        await prisma.user.deleteMany();
+        await prisma.category.deleteMany();
+        await prisma.vehicle.deleteMany();
+        console.log('✅ Base de données réinitialisée\n');
+    } catch (error) {
+        console.error('❌ Erreur lors de la réinitialisation:', error.message);
+        throw error;
+    }
+    
     // Étape 3: Seed des données initiales (catégories, véhicules, utilisateurs de test, etc.)
     await seed();
     

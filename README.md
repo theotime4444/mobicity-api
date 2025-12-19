@@ -23,18 +23,18 @@ API pour le projet Smart City - Localisation de points de transport en commun.
 
 1. **Construire et démarrer les conteneurs** :
    ```bash
-   docker-compose up --build
+   docker compose up --build
    ```
 
 2. **Attendre que la base de données soit prête** (vérifiez les logs) :
    ```bash
-   docker-compose logs -f db
+   docker compose logs -f db
    ```
    Attendez de voir "database system is ready to accept connections"
 
 3. **Initialiser la base de données** (dans un nouveau terminal) :
    ```bash
-   docker-compose exec api npm run initDB
+   docker compose exec api npm run initDB
    ```
    
    Cette commande va automatiquement :
@@ -47,22 +47,22 @@ API pour le projet Smart City - Localisation de points de transport en commun.
 
 4. **Démarrer en arrière-plan** :
    ```bash
-   docker-compose up -d
+   docker compose up -d
    ```
 
 5. **Voir les logs** :
    ```bash
-   docker-compose logs -f api
+   docker compose logs -f api
    ```
 
 6. **Arrêter les conteneurs** :
    ```bash
-   docker-compose down
+   docker compose down
    ```
 
 7. **Redémarrer les conteneurs** :
    ```bash
-   docker-compose restart
+   docker compose restart
    ```
 
 ### Accès à l'API
@@ -140,12 +140,12 @@ Quand vous ajoutez une nouvelle dépendance, vous devez :
 
 1. L'installer dans le conteneur :
    ```bash
-   docker-compose exec api npm i <nom-du-paquet>
+   docker compose exec api npm i <nom-du-paquet>
    ```
 
 2. Ou reconstruire l'image :
    ```bash
-   docker-compose up --build
+   docker compose up --build
    ```
 
 ## 🔧 Structure du projet
@@ -205,7 +205,7 @@ Quand vous ajoutez une nouvelle dépendance, vous devez :
 │       ├── importCSV.js   # Script d'import des données CSV
 │       └── hashPasswords.js # Script utilitaire pour générer des hashs
 ├── Dockerfile             # Configuration Docker pour l'API
-├── docker-compose.yml     # Orchestration des services
+├── compose.yml             # Orchestration des services
 ├── package.json           # Dépendances Node.js
 └── README.md             # Ce fichier
 ```
@@ -286,7 +286,7 @@ La documentation de l'API est générée automatiquement avec Swagger au démarr
 
 ### Visualiser la documentation
 
-1. Démarrez le serveur : `npm run dev` ou `docker-compose up`
+1. Démarrez le serveur : `npm run dev` ou `docker compose up`
 2. Accédez à la documentation interactive : `http://localhost:3001/api-docs`
 3. La documentation est automatiquement générée et mise à jour à chaque démarrage
 

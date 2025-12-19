@@ -33,6 +33,12 @@ const router = Router();
  *             type: integer
  *           description: Number of results to skip
  *           example: 0
+ *         - in: query
+ *           name: search
+ *           schema:
+ *             type: string
+ *           description: Search term to filter users by first name, last name, or email
+ *           example: "dupont"
  *      responses:
  *          200:
  *              description: List of users
