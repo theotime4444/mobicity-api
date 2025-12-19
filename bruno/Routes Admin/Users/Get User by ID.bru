@@ -5,7 +5,7 @@ meta {
 }
 
 get {
-  url: http://localhost:3001/v1/admin/users/1
+  url: http://localhost:3001/v1/admin/users/2
   body: none
   auth: none
 }
@@ -15,7 +15,7 @@ headers {
 }
 
 vars:pre-request {
-  adminToken: 
+  adminToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJtYXJpZS5tYXJ0aW5AbWFpbC5jb20iLCJpc0FkbWluIjp0cnVlLCJpYXQiOjE3NjU5OTU0MjIsImV4cCI6MTc2NjA4MTgyMn0.quVpgPl-Qg7eELFrb4oQyzS7S_uHaJGNtFoVoFrJ09s
 }
 
 docs {
@@ -23,4 +23,3 @@ docs {
   
   Récupère un utilisateur par son ID (admin uniquement).
 }
-
