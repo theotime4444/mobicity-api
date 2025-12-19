@@ -6,7 +6,7 @@ try {
     // Étape 1: Créer/mettre à jour la structure de la base de données depuis schema.prisma
     console.log('📐 Création de la structure de la base de données...');
     try {
-                execSync('npx prisma db push --skip-generate --accept-data-loss', { stdio: 'inherit' });
+                execSync('npx prisma db push --accept-data-loss', { stdio: 'inherit' });
         console.log('✅ Structure de la base de données créée\n');
     } catch (error) {
         console.error('❌ Erreur lors de la création de la structure:', error.message);
