@@ -13,6 +13,16 @@ try {
         throw error;
     }
     
+    console.log(chalk.cyan('[INIT] Création de la structure de la base de données...'));
+    try {
+        execSync('npx prisma db push --accept-data-loss', { stdio: 'inherit' });
+        console.log(chalk.green('[INIT] Structure de la base de données créée\n'));
+    } catch (error) {
+        console.error(chalk.red.bold('[INIT] Erreur lors de la création de la structure:'), error.message);
+        console.log(chalk.yellow('[INIT] Assurez-vous que Prisma est installé: npm install'));
+        throw error;
+    }
+    
     const prisma = (await import("../../database/databaseORM.js")).default;
     const {importCSVData} = await import("./importCSV.js");
     const {seed} = await import("./seed.js");
@@ -28,8 +38,13 @@ try {
         });
         console.log(chalk.green('[INIT] Toutes les anciennes données ont été supprimées'));
     } catch (error) {
-        console.error(chalk.red.bold('[INIT] Erreur lors de la suppression des données:'), error.message);
-        throw error;
+        // Si les tables n'existent pas encore, ce n'est pas grave, on continue
+        if (error.code === 'P2021') {
+            console.log(chalk.yellow('[INIT] Les tables n\'existent pas encore, aucune donnée à supprimer'));
+        } else {
+            console.error(chalk.red.bold('[INIT] Erreur lors de la suppression des données:'), error.message);
+            throw error;
+        }
     }
     
     // Réinitialisation des séquences d'auto-incrémentation
@@ -42,16 +57,6 @@ try {
         console.log(chalk.green('[INIT] Séquences réinitialisées\n'));
     } catch (error) {
         console.error(chalk.red.bold('[INIT] Erreur lors de la réinitialisation des séquences:'), error.message);
-        throw error;
-    }
-    
-    console.log(chalk.cyan('[INIT] Création de la structure de la base de données...'));
-    try {
-        execSync('npx prisma db push --accept-data-loss', { stdio: 'inherit' });
-        console.log(chalk.green('[INIT] Structure de la base de données créée\n'));
-    } catch (error) {
-        console.error(chalk.red.bold('[INIT] Erreur lors de la création de la structure:'), error.message);
-        console.log(chalk.yellow('[INIT] Assurez-vous que Prisma est installé: npm install'));
         throw error;
     }
     
