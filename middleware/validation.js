@@ -117,5 +117,22 @@ export const favoriteValidatorMiddleware = {
         } catch (e) {
             res.status(400).send(e.messages);
         }
+    },
+    nearby: async (req, res, next) => {
+        try {
+            const queryData = {
+                latitude: req.query.latitude ? parseFloat(req.query.latitude) : undefined,
+                longitude: req.query.longitude ? parseFloat(req.query.longitude) : undefined,
+                radius: req.query.radius ? parseFloat(req.query.radius) : undefined,
+                limit: req.query.limit ? parseInt(req.query.limit) : undefined,
+                categoryId: req.query.categoryId ? parseInt(req.query.categoryId) : undefined,
+                search: req.query.search
+            };
+            
+            req.val = await favoriteValidator.favoriteNearby.validate(queryData);
+            next();
+        } catch (e) {
+            res.status(400).send(e.messages);
+        }
     }
 };

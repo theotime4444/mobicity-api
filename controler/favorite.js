@@ -69,6 +69,31 @@ export const getAllFavorites = async (req, res) => {
     }
 };
 
+export const getMyFavoritesNearby = async (req, res) => {
+    try {
+        const userId = req.session.id;
+        const {latitude, longitude, radius, limit, categoryId, search} = req.val;
+        
+        if (radius !== undefined && (latitude === undefined || longitude === undefined)) {
+            return res.status(400).json({error: "radius requires latitude and longitude"});
+        }
+        
+        const favorites = await favoriteModel.readFavoritesNearbyByUser(userId, {
+            latitude,
+            longitude,
+            radius,
+            limit: limit || 50,
+            categoryId,
+            search
+        });
+        
+        res.json(favorites);
+    } catch (err) {
+        console.error(chalk.red.bold('[FAVORITE] Erreur:'), err);
+        res.sendStatus(500);
+    }
+};
+
 export const addFavorite = async (req, res) => {
     try {
         const {userId, transportLocationId} = req.val;

@@ -2,7 +2,8 @@ import {Router} from 'express';
 import {
     getMyFavorites,
     addMyFavorite,
-    deleteMyFavorite
+    deleteMyFavorite,
+    getMyFavoritesNearby
 } from "../../../controler/favorite.js";
 import {favoriteValidatorMiddleware} from "../../../middleware/validation.js";
 
@@ -33,6 +34,80 @@ const router = Router();
  *              description: Error server
  */
 router.get('/me', getMyFavorites);
+
+/**
+ * @swagger
+ * /v1/favorites/me/nearby:
+ *  get:
+ *      security:
+ *          - bearerAuth: []
+ *      tags:
+ *          - Favorite
+ *      summary: Get current user's favorites nearby a point
+ *      description: Returns favorite transport locations for the authenticated user, sorted by distance from a given point using Haversine formula
+ *      parameters:
+ *         - in: query
+ *           name: latitude
+ *           required: true
+ *           schema:
+ *             type: number
+ *           description: Latitude of the reference point (between -90 and 90)
+ *           example: 50.4674
+ *         - in: query
+ *           name: longitude
+ *           required: true
+ *           schema:
+ *             type: number
+ *           description: Longitude of the reference point (between -180 and 180)
+ *           example: 4.8719
+ *         - in: query
+ *           name: radius
+ *           schema:
+ *             type: number
+ *           description: Maximum radius in kilometers (optional, no limit if not provided)
+ *           example: 5
+ *         - in: query
+ *           name: limit
+ *           schema:
+ *             type: integer
+ *           description: Maximum number of results to return (default is 50)
+ *           example: 20
+ *         - in: query
+ *           name: categoryId
+ *           schema:
+ *             type: integer
+ *           description: Filter by category ID
+ *           example: 1
+ *         - in: query
+ *           name: search
+ *           schema:
+ *             type: string
+ *           description: Search term for address
+ *           example: bus
+ *      responses:
+ *          200:
+ *              description: List of favorites with distance
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              allOf:
+ *                                  - $ref: '#/components/schemas/Favorite'
+ *                                  - type: object
+ *                                    properties:
+ *                                        distance:
+ *                                            type: number
+ *                                            description: Distance from the reference point in kilometers (calculated using Haversine formula)
+ *                                            example: 0.5
+ *          400:
+ *              description: Invalid parameters
+ *          401:
+ *              $ref: '#/components/responses/UnauthorizedError'
+ *          500:
+ *              description: Error server
+ */
+router.get('/me/nearby', favoriteValidatorMiddleware.nearby, getMyFavoritesNearby);
 
 /**
  * @swagger
