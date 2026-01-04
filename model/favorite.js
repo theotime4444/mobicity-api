@@ -161,9 +161,7 @@ export const readFavoritesNearbyByUser = async (userId, {latitude, longitude, ra
             });
             
             return {
-                userId: parseInt(userId),
-                transportLocationId: parseInt(row.id),
-                transportLocation: transportLocation,
+                ...transportLocation,
                 distance: parseFloat(row.distance)
             };
         })

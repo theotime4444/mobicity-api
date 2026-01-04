@@ -86,20 +86,13 @@ router.get('/me', getMyFavorites);
  *           example: bus
  *      responses:
  *          200:
- *              description: List of favorites with distance
+ *              description: List of transport locations with distance
  *              content:
  *                  application/json:
  *                      schema:
  *                          type: array
  *                          items:
- *                              allOf:
- *                                  - $ref: '#/components/schemas/Favorite'
- *                                  - type: object
- *                                    properties:
- *                                        distance:
- *                                            type: number
- *                                            description: Distance from the reference point in kilometers (calculated using Haversine formula)
- *                                            example: 0.5
+ *                              $ref: '#/components/schemas/TransportLocationWithDistance'
  *          400:
  *              description: Invalid parameters
  *          401:
